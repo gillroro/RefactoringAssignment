@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 import java.util.List;
 import java.util.Collection;
 
+import database.CourseCreation;
+import database.ScheduleCreation;
 import entity.Course;
 import entity.Offering;
 import entity.Schedule;
@@ -100,42 +102,42 @@ public class TestSchedule extends TestCase {
 	}
 
 	public void testCourseCreate() throws Exception {
-		Course c = Course.create("CS202", 1);
-		Course c2 = Course.find("CS202");
+		Course c = CourseCreation.create("CS202", 1);
+		Course c2 = CourseCreation.find("CS202");
 		assertEquals("CS202", c2.getName());
-		Course c3 = Course.find("Nonexistent");
+		Course c3 = CourseCreation.find("Nonexistent");
 		assertNull(c3);
 	}
 
 	public void testOfferingCreate() throws Exception {
-		Course c = Course.create("CS202", 2);
+		Course c = CourseCreation.create("CS202", 2);
 		Offering offering = Offering.create(c, "M10");
 		assertNotNull(offering);
 	}
 
 	public void testPersistentSchedule() throws Exception {
-		Schedule s = Schedule.create("Bob");
+		Schedule s = ScheduleCreation.create("Bob");
 		assertNotNull(s);
 	}
 
 	public void testScheduleUpdate() throws Exception {
-		Course cs101 = Course.create("CS101", 3);
-		cs101.update();
+		Course cs101 = CourseCreation.create("CS101", 3);
+	//	cs101.update();
 		Offering off1 = Offering.create(cs101, "M10");
 		off1.update();
 		Offering off2 = Offering.create(cs101, "T9");
 		off2.update();
-		Schedule s = Schedule.create("Bob");
+		Schedule s = ScheduleCreation.create("Bob");
 		s.add(off1);
 		s.add(off2);
 		s.update();
-		Schedule s2 = Schedule.create("Alice");
+		Schedule s2 = ScheduleCreation.create("Alice");
 		s2.add(off1);
 		s2.update();
-		Schedule s3 = Schedule.find("Bob");
+		Schedule s3 = ScheduleCreation.find("Bob");
 		System.out.println("Test");
 		assertEquals(2, s3.getOfferings().size());
-		Schedule s4 = Schedule.find("Alice");
+		Schedule s4 = ScheduleCreation.find("Alice");
 		assertEquals(1, s4.getOfferings().size());
 	}
 }

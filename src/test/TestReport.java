@@ -1,4 +1,6 @@
 package test;
+import database.CourseCreation;
+import database.ScheduleCreation;
 import entity.Course;
 import entity.Offering;
 import entity.Report;
@@ -12,7 +14,7 @@ public class TestReport extends TestCase {
 	}
 
 	public void testEmptyReport() throws Exception {
-		Schedule.deleteAll();
+		ScheduleCreation.deleteAll();
 		Report report = new Report();
 		StringBuffer buffer = new StringBuffer();
 		report.write(buffer);
@@ -20,18 +22,18 @@ public class TestReport extends TestCase {
 	}
 
 	public void testReport() throws Exception {
-		Schedule.deleteAll();
-		Course cs101 = Course.create("CS101", 3);
-		cs101.update();
+		ScheduleCreation.deleteAll();
+		Course cs101 = CourseCreation.create("CS101", 3);
+		//cs101.update();
 		Offering off1 = Offering.create(cs101, "M10");
 		off1.update();
 		Offering off2 = Offering.create(cs101, "T9");
 		off2.update();
-		Schedule s = Schedule.create("Bob");
+		Schedule s = ScheduleCreation.create("Bob");
 		s.add(off1);
 		s.add(off2);
 		s.update();
-		Schedule s2 = Schedule.create("Alice");
+		Schedule s2 = ScheduleCreation.create("Alice");
 		s2.add(off1);
 		s2.update();
 		Report report = new Report();

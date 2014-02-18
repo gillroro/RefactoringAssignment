@@ -1,6 +1,8 @@
 package entity;
 import java.util.*;
 
+import database.ScheduleCreation;
+
 public class Report {
 
 	public Report() {
@@ -9,7 +11,7 @@ public class Report {
 	Hashtable<Integer, ArrayList<String>> offeringToName = new Hashtable<Integer, ArrayList<String>>();
 
 	public void populateMap() throws Exception {
-		Collection<Schedule> schedules = Schedule.all();
+		Collection<Schedule> schedules = ScheduleCreation.all();
 		for (Iterator<Schedule> eachSchedule = schedules.iterator(); eachSchedule.hasNext();) {
 			Schedule schedule = (Schedule) eachSchedule.next();
 			for (Iterator<Offering> each = schedule.offerings.iterator(); each.hasNext(); ) {
