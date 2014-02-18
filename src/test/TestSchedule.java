@@ -135,9 +135,9 @@ public class TestSchedule extends TestCase {
 		s2.add(off1);
 		s2.update();
 		Schedule s3 = ScheduleCreation.find("Bob");
-		System.out.println("Test");
 		assertEquals(2, s3.getOfferings().size());
 		Schedule s4 = ScheduleCreation.find("Alice");
 		assertEquals(1, s4.getOfferings().size());
+		
 	}
 }

@@ -1,13 +1,15 @@
-package entity;
-import java.sql.*;
+package database;
 
-import database.ConnectionCreation;
-import database.CourseCreation;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-public class Offering {
-	private int id;
-	private Course course;
-	private String daysTimes;
+import entity.Course;
+import entity.Offering;
+
+public class OfferingCreation {
+	
+	private Offering offering;
 	private static ConnectionCreation createConnection = new ConnectionCreation(); 
 	private static Connection conn;
 
@@ -34,12 +36,12 @@ public class Offering {
 		try {
 			conn = createConnection.getConnection();
 			Statement statement = conn.createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM offering WHERE id =" + id + ";");
+			ResultSet result = statement.executeQuery("SELECT * FROM offering WHERE ID =" + id + ";");
 			if (result.next() == false)
 				return null;
-			String courseName = result.getString("name");
+			String courseName = result.getString("Course");
 			Course course = CourseCreation.find(courseName);
-			String dateTime = result.getString("daysTimes");
+			String dateTime = result.getString("DateTime");
 			conn.close();
 			return new Offering(id, course, dateTime);
 		} 
@@ -55,8 +57,8 @@ public class Offering {
 		try {
 			conn = createConnection.getConnection();
 			Statement statement = conn.createStatement();
-			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + id + ";");
-			statement.executeUpdate("INSERT INTO Offering VALUES('" + id + "','" + course.getName() + "','" + daysTimes + "');");
+			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + offering.getId() + ";");
+			statement.executeUpdate("INSERT INTO Offering VALUES('" + offering.getId() + "','" + offering.getCourse().getName() + "','" + offering.getDaysTimes() + "');");
 		} 
 		finally {
 			try { 
@@ -66,25 +68,5 @@ public class Offering {
 		}
 	}
 
-	public Offering(int id, Course course, String daysTimesCsv) {
-		this.id = id;
-		this.course = course;
-		this.daysTimes = daysTimesCsv;
-	}
 
-	public int getId() {
-		return id;
-	}
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public String getDaysTimes() {
-		return daysTimes;
-	}
-
-	public String toString() {
-		return "Offering " + getId() + ": " + getCourse() + " meeting " + getDaysTimes();
-	}
 }

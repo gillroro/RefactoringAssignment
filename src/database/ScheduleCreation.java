@@ -5,12 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
 
-import entity.Course;
 import entity.Offering;
 import entity.Schedule;
 
@@ -56,16 +51,17 @@ public class ScheduleCreation {
 		try {
 			conn = createConnection.getConnection();
 			Statement statement = conn.createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM schedule WHERE Name= '" + name + "';");
+			ResultSet result = statement.executeQuery("SELECT * FROM schedule WHERE name= '" + name + "';");
 			Schedule schedule = new Schedule(name);
 			while (result.next()) {
-				int offeringId = result.getInt("OfferingId");
+				int offeringId = result.getInt("offeringId");
 				Offering offering = Offering.find(offeringId);
 				schedule.add(offering);
 			}
 			return schedule;
 		} 
 		catch (Exception ex) {
+			System.out.println(ex.getMessage());
 			return null;
 		} 
 		finally {

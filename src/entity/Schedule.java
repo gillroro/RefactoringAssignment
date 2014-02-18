@@ -1,6 +1,11 @@
 package entity;
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import database.ConnectionCreation;
 
@@ -11,6 +16,8 @@ public class Schedule {
 	static final int minCredits = 12;
 	static final int maxCredits = 18;
 	boolean permission = false;
+	private static ConnectionCreation createConnection = new ConnectionCreation(); 
+	private static Connection conn;
 	
 	public ArrayList<Offering> offerings = new ArrayList<Offering>();
 
@@ -41,6 +48,7 @@ public class Schedule {
 	}
 	
 	public void add(Offering offering) {
+	
 		credits += offering.getCourse().getCredits();
 		offerings.add(offering);
 	}
@@ -84,8 +92,26 @@ public class Schedule {
 			}
 		}
 	}
+	
+	public void update() throws Exception {
+		
+		try {
+			conn = createConnection.getConnection();
+			Statement statement = conn.createStatement();
+			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + name + "';");
+			for (int i = 0; i < offerings.size(); i++) {
+				Offering offering = (Offering) offerings.get(i);
+				statement.executeUpdate("INSERT INTO schedule(name, offeringId) VALUES('" + name + "','" + offering.getId() + "');");
+			}
+		} 
+		finally {
+			try { 
+				conn.close(); 
+			} 
+			catch (Exception ignored) {}
+		}
 
 	
-	
+	}
 	
 }
