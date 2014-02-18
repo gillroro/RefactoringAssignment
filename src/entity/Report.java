@@ -1,7 +1,8 @@
+package entity;
 import java.util.*;
 
 public class Report {
-	
+
 	public Report() {
 	}
 

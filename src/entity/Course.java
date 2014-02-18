@@ -1,23 +1,24 @@
+package entity;
 import java.sql.*;
 
 public class Course {
 	private String name;
 	private int credits;
-	static String url = "jdbc:odbc:Registration";
+	static String url = "jdbc:mysql://localhost:3306/registration";
 	static { 
 		try { 
-			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); 
-			}
+			Class.forName("com.mysql.jdbc.Driver"); 
+		}
 		catch (Exception ignored) {} 
 	}
 
 	public static Course create(String name, int credits) throws Exception {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, "", "");
+			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM course WHERE name = '" + name + "';");
-			statement.executeUpdate("INSERT INTO course VALUES ('" + name + "', '" + credits + "');");
+			statement.executeUpdate("INSERT INTO course (name, credits) VALUES ('" + name + "', '" + credits + "');");
 			return new Course(name, credits);
 		} 
 		finally {
@@ -31,7 +32,7 @@ public class Course {
 	public static Course find(String name) {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, "", "");
+			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM course WHERE Name = '" + name + "';");
 			if (!result.next()) return null;
@@ -48,14 +49,14 @@ public class Course {
 			catch (Exception ignored) {}
 		}
 	}
-	
+
 	public void update() throws Exception {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, "", "");
+			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM COURSE WHERE name = '" + name + "';");
-			statement.executeUpdate("INSERT INTO course VALUES('" + name + "','" + credits + "');");
+			statement.executeUpdate("INSERT INTO course (name, credits) VALUES('" + name + "','" + credits + "');");
 		} 
 		finally {
 			try { 
@@ -65,11 +66,11 @@ public class Course {
 		}
 	}
 
-	Course(String name, int credits) {
+	public Course(String name, int credits) {
 		this.name = name;
 		this.credits = credits;
 	}
-	
+
 	public int getCredits() {
 		return credits;
 	}

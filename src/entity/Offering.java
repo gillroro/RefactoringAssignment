@@ -1,21 +1,22 @@
+package entity;
 import java.sql.*;
 
 public class Offering {
 	private int id;
 	private Course course;
 	private String daysTimes;
-	static String url = "jdbc:odbc:Reggie";
+	static String url = "jdbc:mysql://localhost:3306/registration";
 	static { 
 		try { 
-			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); 
-			}
+			Class.forName("com.mysql.jdbc.Driver"); 
+		}
 		catch (Exception ignored) {} 
 	}
 
 	public static Offering create(Course course, String daysTimesCsv) throws Exception {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, "", "");
+			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT MAX(ID) FROM offering;");
 			result.next();
@@ -26,7 +27,7 @@ public class Offering {
 		finally {
 			try { 
 				conn.close(); 
-				} 
+			} 
 			catch (Exception ignored) {}
 		}
 	}
@@ -34,7 +35,7 @@ public class Offering {
 	public static Offering find(int id) {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, "", "");
+			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM offering WHERE ID =" + id + ";");
 			if (result.next() == false)
@@ -52,11 +53,11 @@ public class Offering {
 			return null;
 		}
 	}
-	
+
 	public void update() throws Exception {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, "", "");
+			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + id + ";");
 			statement.executeUpdate("INSERT INTO Offering VALUES('" + id + "','" + course.getName() + "','" + daysTimes + "');");

@@ -1,9 +1,15 @@
+package test;
 import junit.framework.TestCase;
+
 import java.util.List;
 import java.util.Collection;
 
+import entity.Course;
+import entity.Offering;
+import entity.Schedule;
+
 public class TestSchedule extends TestCase {
-	
+
 	public TestSchedule(String name) {
 		super(name);
 	}
@@ -14,7 +20,7 @@ public class TestSchedule extends TestCase {
 		assertEquals(1, analysis.size());
 		assertTrue(analysis.contains("Too few credits"));
 	}
-	
+
 	public void testJustEnoughCredits() {
 		Course cs110 = new Course("CS110", 11);
 		Offering mwf10 = new Offering(1, cs110, "M10,W10,F10");
@@ -71,7 +77,7 @@ public class TestSchedule extends TestCase {
 		assertEquals(1, analysis.size());
 		assertTrue(analysis.contains("Same course twice - CS110"));
 	}
-	
+
 	public void testOverlap() {
 		Schedule schedule = new Schedule("name");
 		Course cs110 = new Course("CS110", 6);

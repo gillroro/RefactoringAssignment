@@ -1,13 +1,16 @@
+package test;
+import entity.Course;
+import entity.Offering;
+import entity.Report;
+import entity.Schedule;
 import junit.framework.TestCase;
-import java.util.List;
-import java.util.Collection;
 
 public class TestReport extends TestCase {
 
 	public TestReport(String name) { 
 		super(name); 
 	}
-	
+
 	public void testEmptyReport() throws Exception {
 		Schedule.deleteAll();
 		Report report = new Report();
@@ -15,7 +18,7 @@ public class TestReport extends TestCase {
 		report.write(buffer);
 		assertEquals("Number of scheduled offerings: 0\n", buffer.toString());
 	}
-	
+
 	public void testReport() throws Exception {
 		Schedule.deleteAll();
 		Course cs101 = Course.create("CS101", 3);
