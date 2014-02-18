@@ -10,7 +10,7 @@ public class Schedule {
 	static final int maxCredits = 18;
 	boolean permission = false;
 
-	public ArrayList<Offering> schedule = new ArrayList<Offering>();
+	public ArrayList<Offering> offerings = new ArrayList<Offering>();
 
 	static String url = "jdbc:mysql://localhost:3306/registration";
 	static { 
@@ -101,8 +101,8 @@ public class Schedule {
 			conn = DriverManager.getConnection(url, "root", "root");
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + name + "';");
-			for (int i = 0; i < schedule.size(); i++) {
-				Offering offering = (Offering) schedule.get(i);
+			for (int i = 0; i < offerings.size(); i++) {
+				Offering offering = (Offering) offerings.get(i);
 				statement.executeUpdate("INSERT INTO schedule(name, offeringId) VALUES('" + name + "','" + offering.getId() + "');");
 			}
 		} 
@@ -120,7 +120,7 @@ public class Schedule {
 
 	public void add(Offering offering) {
 		credits += offering.getCourse().getCredits();
-		schedule.add(offering);
+		offerings.add(offering);
 	}
 
 	public void authorizeOverload(boolean authorized) {
@@ -140,8 +140,8 @@ public class Schedule {
 
 	public void checkDuplicateCourses(ArrayList<String> analysis) {
 		HashSet<Course> courses = new HashSet<Course>();
-		for (int i = 0; i < schedule.size(); i++) {
-			Course course = ((Offering) schedule.get(i)).getCourse();
+		for (int i = 0; i < offerings.size(); i++) {
+			Course course = ((Offering) offerings.get(i)).getCourse();
 			if (courses.contains(course))
 				analysis.add("Same course twice - " + course.getName());
 			courses.add(course);
@@ -150,7 +150,7 @@ public class Schedule {
 
 	public void checkOverlap(ArrayList<String> analysis) {
 		HashSet<String> times = new HashSet<String>();
-		for (Iterator<Offering> iterator = schedule.iterator(); iterator.hasNext();) {
+		for (Iterator<Offering> iterator = offerings.iterator(); iterator.hasNext();) {
 			Offering offering = (Offering) iterator.next();
 			String daysTimes = offering.getDaysTimes();
 			StringTokenizer tokens = new StringTokenizer(daysTimes, ",");
@@ -164,6 +164,25 @@ public class Schedule {
 	}
 
 	public String toString() {
-		return "Schedule " + name + ": " + schedule;
+		return "Schedule " + name + ": " + offerings;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ArrayList<Offering> getOfferings() {
+		return offerings;
+	}
+
+	public void setOfferings(ArrayList<Offering> offerings) {
+		this.offerings = offerings;
+	}
+	
+	
+	
 }
