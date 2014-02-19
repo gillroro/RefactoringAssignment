@@ -1,7 +1,4 @@
 package entity;
-import java.sql.*;
-
-import database.ConnectionCreation;
 
 public class Course {
 	private String name;
