@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import database.ConnectionCreation;
+import database.DBUtil;
 
 public class Schedule {
 	//Changed this class into a POJO. 
@@ -108,7 +109,7 @@ public class Schedule {
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}

@@ -17,11 +17,13 @@ public class CourseCreation {
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM course WHERE name = '" + name + "';");
 			statement.executeUpdate("INSERT INTO course (name, credits) VALUES ('" + name + "', '" + credits + "');");
+			DBUtil.close(statement);
 			return new Course(name, credits);
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
+				
 			} 
 			catch (Exception ignored) {}
 		}
@@ -34,6 +36,8 @@ public class CourseCreation {
 			ResultSet result = statement.executeQuery("SELECT * FROM course WHERE Name = '" + name + "';");
 			if (!result.next()) return null;
 			int credits = result.getInt("Credits");
+			DBUtil.close(statement);
+			DBUtil.close(result);
 			return new Course(name, credits);
 		} 
 		catch (Exception ex) {
@@ -41,7 +45,7 @@ public class CourseCreation {
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -53,10 +57,12 @@ public class CourseCreation {
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM COURSE WHERE name = '" + course.getName() + "';");
 			statement.executeUpdate("INSERT INTO course (name, credits) VALUES('" + course.getName() + "','" + course.getCredits() + "');");
+			DBUtil.close(statement);
+			
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection();  
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}

@@ -8,12 +8,12 @@ import entity.Course;
 import entity.Offering;
 
 public class OfferingCreation {
-	
+
 	private Offering offering;
 	private static Connection conn;
 
 	public static Offering create(Course course, String daysTimesCsv) throws Exception {
-		
+
 		try {
 			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
@@ -21,11 +21,13 @@ public class OfferingCreation {
 			result.next();
 			int newId = 1 + result.getInt(1);
 			statement.executeUpdate("INSERT INTO offering VALUES ('"+ newId + "','" + course.getName() + "','" + daysTimesCsv + "');");
+			DBUtil.close(statement);
+			DBUtil.close(result);
 			return new Offering(newId, course, daysTimesCsv);
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}
@@ -41,12 +43,14 @@ public class OfferingCreation {
 			String courseName = result.getString("name");
 			Course course = CourseCreation.find(courseName);
 			String dateTime = result.getString("daysTimes");
-			ConnectionCreation.closeConnection(); 
+			DBUtil.close(statement);
+			DBUtil.close(result);
+			DBUtil.close(conn);
 			return new Offering(id, course, dateTime);
 		} 
 		catch (Exception ex) {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} catch (Exception ignored) {}
 			return null;
 		}
@@ -58,10 +62,12 @@ public class OfferingCreation {
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + offering.getId() + ";");
 			statement.executeUpdate("INSERT INTO Offering VALUES('" + offering.getId() + "','" + offering.getCourse().getName() + "','" + offering.getDaysTimes() + "');");
+			DBUtil.close(statement);
+			
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}

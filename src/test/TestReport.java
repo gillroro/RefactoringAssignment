@@ -1,4 +1,8 @@
 package test;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import database.CourseCreation;
 import database.OfferingCreation;
 import database.ScheduleCreation;
@@ -6,14 +10,14 @@ import entity.Course;
 import entity.Offering;
 import entity.Report;
 import entity.Schedule;
-import junit.framework.TestCase;
 
-public class TestReport extends TestCase {
+public class TestReport  {
 
-	public TestReport(String name) { 
-		super(name); 
+	public TestReport() { 
+		
 	}
 
+	@Test
 	public void testEmptyReport() throws Exception {
 		ScheduleCreation.deleteAll();
 		Report report = new Report();
@@ -21,7 +25,8 @@ public class TestReport extends TestCase {
 		report.write(buffer);
 		assertEquals("Number of scheduled offerings: 0\n", buffer.toString());
 	}
-
+	
+	@Test
 	public void testReport() throws Exception {
 		ScheduleCreation.deleteAll();
 		Course cs101 = CourseCreation.create("CS101", 3);

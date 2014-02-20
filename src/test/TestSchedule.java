@@ -1,8 +1,11 @@
 package test;
-import junit.framework.TestCase;
 
-import java.util.List;
+import static org.junit.Assert.*;
+
 import java.util.Collection;
+import java.util.List;
+
+import org.junit.Test;
 
 import database.CourseCreation;
 import database.OfferingCreation;
@@ -11,12 +14,10 @@ import entity.Course;
 import entity.Offering;
 import entity.Schedule;
 
-public class TestSchedule extends TestCase {
+public class TestSchedule {
 
-	public TestSchedule(String name) {
-		super(name);
-	}
-
+	
+	@Test
 	public void testMinCredits() {
 		Schedule schedule = new Schedule("name");
 		Collection<String> analysis = schedule.analysis();
@@ -24,6 +25,7 @@ public class TestSchedule extends TestCase {
 		assertTrue(analysis.contains("Too few credits"));
 	}
 
+	@Test
 	public void testJustEnoughCredits() {
 		Course cs110 = new Course("CS110", 11);
 		Offering mwf10 = new Offering(1, cs110, "M10,W10,F10");
@@ -40,6 +42,7 @@ public class TestSchedule extends TestCase {
 		assertEquals(0, analysis.size());
 	}
 
+	@Test
 	public void testMaxCredits() {
 		Course cs110 = new Course("CS110", 20);
 		Offering mwf10 = new Offering(1, cs110, "M10,W10,F10");
@@ -53,6 +56,7 @@ public class TestSchedule extends TestCase {
 		assertEquals(0, analysis.size());
 	}
 
+	@Test
 	public void testJustBelowMax() {
 		Course cs110 = new Course("CS110", 19);
 		Offering mwf10 = new Offering(1, cs110, "M10,W10,F10");
@@ -69,6 +73,7 @@ public class TestSchedule extends TestCase {
 		assertEquals(0, analysis.size());
 	}
 
+	@Test
 	public void testDupCourses() {
 		Course cs110 = new Course("CS110", 6);
 		Offering mwf10 = new Offering(1, cs110, "M10,W10,F10");
@@ -81,6 +86,7 @@ public class TestSchedule extends TestCase {
 		assertTrue(analysis.contains("Same course twice - CS110"));
 	}
 
+	@Test
 	public void testOverlap() {
 		Schedule schedule = new Schedule("name");
 		Course cs110 = new Course("CS110", 6);
@@ -102,6 +108,7 @@ public class TestSchedule extends TestCase {
 		assertTrue(analysis.contains("Course overlap - F11"));
 	}
 
+	@Test
 	public void testCourseCreate() throws Exception {
 		Course c = CourseCreation.create("CS202", 1);
 		Course c2 = CourseCreation.find("CS202");
@@ -110,17 +117,20 @@ public class TestSchedule extends TestCase {
 		assertNull(c3);
 	}
 
+	@Test
 	public void testOfferingCreate() throws Exception {
 		Course c = CourseCreation.create("CS202", 2);
 		Offering offering = OfferingCreation.create(c, "M10");
 		assertNotNull(offering);
 	}
 
+	@Test
 	public void testPersistentSchedule() throws Exception {
 		Schedule s = ScheduleCreation.create("Bob");
 		assertNotNull(s);
 	}
 
+	@Test
 	public void testScheduleUpdate() throws Exception {
 		Course cs101 = CourseCreation.create("CS101", 3);
 	//	cs101.update();

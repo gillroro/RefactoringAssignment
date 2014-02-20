@@ -20,10 +20,11 @@ public class ScheduleCreation {
 			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule");
+			DBUtil.close(statement);
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}
@@ -35,11 +36,12 @@ public class ScheduleCreation {
 			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + name + "';");
+			DBUtil.close(statement);
 			return new Schedule(name);
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}
@@ -57,6 +59,8 @@ public class ScheduleCreation {
 				Offering offering = OfferingCreation.find(offeringId);
 				schedule.add(offering);
 			}
+			DBUtil.close(statement);
+			DBUtil.close(result);
 			return schedule;
 		} 
 		catch (Exception ex) {
@@ -65,7 +69,7 @@ public class ScheduleCreation {
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}
@@ -80,10 +84,12 @@ public class ScheduleCreation {
 			ResultSet results = statement.executeQuery("SELECT DISTINCT Name FROM schedule;");
 			while (results.next())
 				result.add(ScheduleCreation.find(results.getString("Name")));
+			DBUtil.close(statement);
+			DBUtil.close(results);
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}
@@ -100,10 +106,11 @@ public class ScheduleCreation {
 				Offering offering = (Offering) schedule.getOfferings().get(i);
 				statement.executeUpdate("INSERT INTO schedule(name, offeringId) VALUES('" + schedule.getName() + "','" + offering.getId() + "');");
 			}
+			DBUtil.close(statement);
 		} 
 		finally {
 			try { 
-				ConnectionCreation.closeConnection(); 
+				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
 		}

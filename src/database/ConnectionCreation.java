@@ -2,7 +2,6 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class ConnectionCreation {
 	
@@ -36,13 +35,5 @@ public class ConnectionCreation {
 		return instance.createConnection();
 	}
 	
-	public static void closeConnection(){
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 }
