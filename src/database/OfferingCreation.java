@@ -10,13 +10,12 @@ import entity.Offering;
 public class OfferingCreation {
 	
 	private Offering offering;
-	private static ConnectionCreation createConnection = new ConnectionCreation(); 
 	private static Connection conn;
 
 	public static Offering create(Course course, String daysTimesCsv) throws Exception {
 		
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT MAX(ID) FROM offering;");
 			result.next();
@@ -26,7 +25,7 @@ public class OfferingCreation {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -34,20 +33,20 @@ public class OfferingCreation {
 
 	public static Offering find(int id) {
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM offering WHERE ID =" + id + ";");
+			ResultSet result = statement.executeQuery("SELECT * FROM offering WHERE id =" + id + ";");
 			if (result.next() == false)
 				return null;
-			String courseName = result.getString("Course");
+			String courseName = result.getString("name");
 			Course course = CourseCreation.find(courseName);
-			String dateTime = result.getString("DateTime");
-			conn.close();
+			String dateTime = result.getString("daysTimes");
+			ConnectionCreation.closeConnection(); 
 			return new Offering(id, course, dateTime);
 		} 
 		catch (Exception ex) {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} catch (Exception ignored) {}
 			return null;
 		}
@@ -55,14 +54,14 @@ public class OfferingCreation {
 
 	public void update() throws Exception {
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + offering.getId() + ";");
 			statement.executeUpdate("INSERT INTO Offering VALUES('" + offering.getId() + "','" + offering.getCourse().getName() + "','" + offering.getDaysTimes() + "');");
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}

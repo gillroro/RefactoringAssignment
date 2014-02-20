@@ -8,13 +8,12 @@ import entity.Course;
 
 public class CourseCreation {
 
-	private Course course;
-	private static ConnectionCreation createConnection = new ConnectionCreation(); 
+	private Course course; 
 	private static Connection conn;
 
 	public static Course create(String name, int credits) throws Exception {
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM course WHERE name = '" + name + "';");
 			statement.executeUpdate("INSERT INTO course (name, credits) VALUES ('" + name + "', '" + credits + "');");
@@ -22,7 +21,7 @@ public class CourseCreation {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -30,7 +29,7 @@ public class CourseCreation {
 
 	public static Course find(String name) {
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM course WHERE Name = '" + name + "';");
 			if (!result.next()) return null;
@@ -42,7 +41,7 @@ public class CourseCreation {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -50,14 +49,14 @@ public class CourseCreation {
 
 	public void update() throws Exception {
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM COURSE WHERE name = '" + course.getName() + "';");
 			statement.executeUpdate("INSERT INTO course (name, credits) VALUES('" + course.getName() + "','" + course.getCredits() + "');");
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection();  
 			} 
 			catch (Exception ignored) {}
 		}

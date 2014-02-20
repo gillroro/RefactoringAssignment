@@ -1,59 +1,25 @@
 package entity;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
 
 import database.ConnectionCreation;
-import database.CourseCreation;
+
+//Changed this class into a POJO. 
+//It should only know about the instance variables and have a getter and setter method for each variable.
+//Took out all the database activity into a new class.
 
 public class Offering {
 	private int id;
 	private Course course;
 	private String daysTimes;
-	private static ConnectionCreation createConnection = new ConnectionCreation(); 
+	
 	private static Connection conn;
 
-	public static Offering create(Course course, String daysTimesCsv) throws Exception {
-		
-		try {
-			conn = createConnection.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet result = statement.executeQuery("SELECT MAX(ID) FROM offering;");
-			result.next();
-			int newId = 1 + result.getInt(1);
-			statement.executeUpdate("INSERT INTO offering VALUES ('"+ newId + "','" + course.getName() + "','" + daysTimesCsv + "');");
-			return new Offering(newId, course, daysTimesCsv);
-		} 
-		finally {
-			try { 
-				conn.close(); 
-			} 
-			catch (Exception ignored) {}
-		}
-	}
-
-	public static Offering find(int id) {
-		try {
-			conn = createConnection.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet result = statement.executeQuery("SELECT * FROM offering WHERE id =" + id + ";");
-			if (result.next() == false)
-				return null;
-			String courseName = result.getString("name");
-			Course course = CourseCreation.find(courseName);
-			String dateTime = result.getString("daysTimes");
-			conn.close();
-			return new Offering(id, course, dateTime);
-		} 
-		catch (Exception ex) {
-			try { 
-				conn.close(); 
-			} catch (Exception ignored) {}
-			return null;
-		}
-	}
+	
 
 	public void update() throws Exception {
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + id + ";");
 			statement.executeUpdate("INSERT INTO Offering VALUES('" + id + "','" + course.getName() + "','" + daysTimes + "');");

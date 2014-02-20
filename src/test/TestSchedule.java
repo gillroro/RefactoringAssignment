@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Collection;
 
 import database.CourseCreation;
+import database.OfferingCreation;
 import database.ScheduleCreation;
 import entity.Course;
 import entity.Offering;
@@ -111,7 +112,7 @@ public class TestSchedule extends TestCase {
 
 	public void testOfferingCreate() throws Exception {
 		Course c = CourseCreation.create("CS202", 2);
-		Offering offering = Offering.create(c, "M10");
+		Offering offering = OfferingCreation.create(c, "M10");
 		assertNotNull(offering);
 	}
 
@@ -123,9 +124,9 @@ public class TestSchedule extends TestCase {
 	public void testScheduleUpdate() throws Exception {
 		Course cs101 = CourseCreation.create("CS101", 3);
 	//	cs101.update();
-		Offering off1 = Offering.create(cs101, "M10");
+		Offering off1 = OfferingCreation.create(cs101, "M10");
 		off1.update();
-		Offering off2 = Offering.create(cs101, "T9");
+		Offering off2 = OfferingCreation.create(cs101, "T9");
 		off2.update();
 		Schedule s = ScheduleCreation.create("Bob");
 		s.add(off1);

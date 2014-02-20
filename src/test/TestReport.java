@@ -1,5 +1,6 @@
 package test;
 import database.CourseCreation;
+import database.OfferingCreation;
 import database.ScheduleCreation;
 import entity.Course;
 import entity.Offering;
@@ -25,9 +26,9 @@ public class TestReport extends TestCase {
 		ScheduleCreation.deleteAll();
 		Course cs101 = CourseCreation.create("CS101", 3);
 		//cs101.update();
-		Offering off1 = Offering.create(cs101, "M10");
+		Offering off1 = OfferingCreation.create(cs101, "M10");
 		off1.update();
-		Offering off2 = Offering.create(cs101, "T9");
+		Offering off2 = OfferingCreation.create(cs101, "T9");
 		off2.update();
 		Schedule s = ScheduleCreation.create("Bob");
 		s.add(off1);

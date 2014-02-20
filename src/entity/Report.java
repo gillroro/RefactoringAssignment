@@ -1,6 +1,7 @@
 package entity;
 import java.util.*;
 
+import database.OfferingCreation;
 import database.ScheduleCreation;
 
 public class Report {
@@ -44,7 +45,7 @@ public class Report {
 		while (enumeration.hasMoreElements()) {
 			Integer offeringId = (Integer)enumeration.nextElement();
 			ArrayList<String> list = (ArrayList<String>)offeringToName.get(offeringId);
-			writeOffering(buffer, list, Offering.find(offeringId.intValue()));
+			writeOffering(buffer, list, OfferingCreation.find(offeringId.intValue()));
 		}
 		buffer.append("Number of scheduled offerings: ");
 		buffer.append(offeringToName.size());

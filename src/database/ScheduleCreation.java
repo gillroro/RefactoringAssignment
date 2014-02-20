@@ -12,19 +12,18 @@ import entity.Schedule;
 public class ScheduleCreation {
 	
 	private static Connection conn;
-	private static ConnectionCreation createConnection = new ConnectionCreation(); 
 	private Schedule schedule;
 	
 	public static void deleteAll() throws Exception {
 		
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule");
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -33,14 +32,14 @@ public class ScheduleCreation {
 	public static Schedule create(String name) throws Exception {
 		
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + name + "';");
 			return new Schedule(name);
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -49,13 +48,13 @@ public class ScheduleCreation {
 	public static Schedule find(String name) {
 		
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM schedule WHERE name= '" + name + "';");
 			Schedule schedule = new Schedule(name);
 			while (result.next()) {
 				int offeringId = result.getInt("offeringId");
-				Offering offering = Offering.find(offeringId);
+				Offering offering = OfferingCreation.find(offeringId);
 				schedule.add(offering);
 			}
 			return schedule;
@@ -66,7 +65,7 @@ public class ScheduleCreation {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -76,7 +75,7 @@ public class ScheduleCreation {
 		ArrayList<Schedule> result = new ArrayList<Schedule>();
 		
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet results = statement.executeQuery("SELECT DISTINCT Name FROM schedule;");
 			while (results.next())
@@ -84,7 +83,7 @@ public class ScheduleCreation {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
@@ -94,7 +93,7 @@ public class ScheduleCreation {
 	public void update() throws Exception {
 	
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + schedule.getName() + "';");
 			for (int i = 0; i < schedule.getOfferings().size(); i++) {
@@ -104,7 +103,7 @@ public class ScheduleCreation {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}

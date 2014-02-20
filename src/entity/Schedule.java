@@ -10,13 +10,15 @@ import java.util.StringTokenizer;
 import database.ConnectionCreation;
 
 public class Schedule {
+	//Changed this class into a POJO. 
+	//It should only know about the instance variables and have a getter and setter method for each variable.
+	//Took out all the database activity into a new class.
 
 	String name;
 	int credits = 0;
 	static final int minCredits = 12;
 	static final int maxCredits = 18;
 	boolean permission = false;
-	private static ConnectionCreation createConnection = new ConnectionCreation(); 
 	private static Connection conn;
 	
 	public ArrayList<Offering> offerings = new ArrayList<Offering>();
@@ -96,7 +98,7 @@ public class Schedule {
 	public void update() throws Exception {
 		
 		try {
-			conn = createConnection.getConnection();
+			conn = ConnectionCreation.getConnection();
 			Statement statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + name + "';");
 			for (int i = 0; i < offerings.size(); i++) {
@@ -106,7 +108,7 @@ public class Schedule {
 		} 
 		finally {
 			try { 
-				conn.close(); 
+				ConnectionCreation.closeConnection(); 
 			} 
 			catch (Exception ignored) {}
 		}
