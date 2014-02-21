@@ -16,7 +16,7 @@ public class Report {
 	Hashtable<Integer, ArrayList<String>> offeringToName = new Hashtable<Integer, ArrayList<String>>();
 
 	public void populateMap() throws Exception {
-		Collection<Schedule> schedules = ScheduleDAO.all();
+		Collection<Schedule> schedules = ScheduleDAO.all();//connects to the new DAO class for schedule
 		for (Iterator<Schedule> eachSchedule = schedules.iterator(); eachSchedule.hasNext();) {
 			Schedule schedule = (Schedule) eachSchedule.next();
 			for (Iterator<Offering> each = schedule.offerings.iterator(); each.hasNext(); ) {
@@ -49,7 +49,7 @@ public class Report {
 		while (enumeration.hasMoreElements()) {
 			Integer offeringId = (Integer)enumeration.nextElement();
 			ArrayList<String> list = (ArrayList<String>)offeringToName.get(offeringId);
-			writeOffering(buffer, list, OfferingDAO.find(offeringId.intValue()));
+			writeOffering(buffer, list, OfferingDAO.find(offeringId.intValue()));//finds value of offeringID using the DAO class
 		}
 		buffer.append("Number of scheduled offerings: ");
 		buffer.append(offeringToName.size());

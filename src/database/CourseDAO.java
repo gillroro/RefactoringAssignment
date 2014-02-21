@@ -38,7 +38,7 @@ public class CourseDAO {
 			ResultSet result = statement.executeQuery("SELECT * FROM course WHERE Name = '" + name + "';");
 			if (!result.next()) return null;
 			int credits = result.getInt("Credits");
-			DBUtil.close(result);
+			DBUtil.close(result);//closes the connection to the results set
 			return new Course(name, credits);
 		} 
 		catch (Exception ex) {
@@ -46,8 +46,8 @@ public class CourseDAO {
 		} 
 		finally {
 			try {
-				DBUtil.close(statement);
-				DBUtil.close(conn); 
+				DBUtil.close(statement);//closes off the connection to the Statement
+				DBUtil.close(conn);//closes the connection to the database
 			} 
 			catch (Exception ignored) {}
 		}

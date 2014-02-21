@@ -41,8 +41,8 @@ public class ScheduleDAO{
 		} 
 		finally {
 			try { 
-				DBUtil.close(statement);
-				DBUtil.close(conn);
+				DBUtil.close(statement);//closes off the connection to the Statement
+				DBUtil.close(conn);//closes the connection to the database
 			} 
 			catch (Exception ignored) {}
 		}

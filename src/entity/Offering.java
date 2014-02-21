@@ -12,25 +12,8 @@ public class Offering {
 	private int id;
 	private Course course;
 	private String daysTimes;
-	
+
 	private static Connection conn;
-
-	
-
-	public void update() throws Exception {
-		try {
-			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
-			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + id + ";");
-			statement.executeUpdate("INSERT INTO Offering VALUES('" + id + "','" + course.getName() + "','" + daysTimes + "');");
-		} 
-		finally {
-			try { 
-				conn.close(); 
-			} 
-			catch (Exception ignored) {}
-		}
-	}
 
 	public Offering(int id, Course course, String daysTimesCsv) {
 		this.id = id;
@@ -52,5 +35,22 @@ public class Offering {
 
 	public String toString() {
 		return "Offering " + getId() + ": " + getCourse() + " meeting " + getDaysTimes();
+	}
+
+
+
+	public void update() throws Exception {
+		try {
+			conn = ConnectionCreation.getConnection();
+			Statement statement = conn.createStatement();
+			statement.executeUpdate("DELETE FROM Offering WHERE ID=" + id + ";");
+			statement.executeUpdate("INSERT INTO Offering VALUES('" + id + "','" + course.getName() + "','" + daysTimes + "');");
+		} 
+		finally {
+			try { 
+				conn.close(); 
+			} 
+			catch (Exception ignored) {}
+		}
 	}
 }
