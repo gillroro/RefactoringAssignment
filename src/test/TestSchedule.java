@@ -136,7 +136,6 @@ public class TestSchedule {
 	@Test
 	public void testScheduleUpdate() throws Exception {
 		Course cs101 = CourseDAO.create("CS101", 3);
-	//	cs101.update();
 		Offering off1 = OfferingDAO.create(cs101, "M10");
 		off1.update();
 		Offering off2 = OfferingDAO.create(cs101, "T9");
