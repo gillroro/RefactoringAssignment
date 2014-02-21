@@ -1,8 +1,12 @@
 package entity;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
 
-import database.OfferingCreation;
-import database.ScheduleCreation;
+import database.OfferingDAO;
+import database.ScheduleDAO;
 
 public class Report {
 
@@ -12,7 +16,7 @@ public class Report {
 	Hashtable<Integer, ArrayList<String>> offeringToName = new Hashtable<Integer, ArrayList<String>>();
 
 	public void populateMap() throws Exception {
-		Collection<Schedule> schedules = ScheduleCreation.all();
+		Collection<Schedule> schedules = ScheduleDAO.all();
 		for (Iterator<Schedule> eachSchedule = schedules.iterator(); eachSchedule.hasNext();) {
 			Schedule schedule = (Schedule) eachSchedule.next();
 			for (Iterator<Offering> each = schedule.offerings.iterator(); each.hasNext(); ) {
@@ -45,7 +49,7 @@ public class Report {
 		while (enumeration.hasMoreElements()) {
 			Integer offeringId = (Integer)enumeration.nextElement();
 			ArrayList<String> list = (ArrayList<String>)offeringToName.get(offeringId);
-			writeOffering(buffer, list, OfferingCreation.find(offeringId.intValue()));
+			writeOffering(buffer, list, OfferingDAO.find(offeringId.intValue()));
 		}
 		buffer.append("Number of scheduled offerings: ");
 		buffer.append(offeringToName.size());

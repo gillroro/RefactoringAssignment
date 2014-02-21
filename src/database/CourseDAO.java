@@ -6,22 +6,24 @@ import java.sql.Statement;
 
 import entity.Course;
 
-public class CourseCreation {
+public class CourseDAO {
 
 	private Course course; 
 	private static Connection conn;
+	private static Statement statement ;
 
 	public static Course create(String name, int credits) throws Exception {
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM course WHERE name = '" + name + "';");
 			statement.executeUpdate("INSERT INTO course (name, credits) VALUES ('" + name + "', '" + credits + "');");
-			DBUtil.close(statement);
+			
 			return new Course(name, credits);
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 				
 			} 
@@ -32,11 +34,10 @@ public class CourseCreation {
 	public static Course find(String name) {
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM course WHERE Name = '" + name + "';");
 			if (!result.next()) return null;
 			int credits = result.getInt("Credits");
-			DBUtil.close(statement);
 			DBUtil.close(result);
 			return new Course(name, credits);
 		} 
@@ -44,7 +45,8 @@ public class CourseCreation {
 			return null;
 		} 
 		finally {
-			try { 
+			try {
+				DBUtil.close(statement);
 				DBUtil.close(conn); 
 			} 
 			catch (Exception ignored) {}
@@ -54,14 +56,13 @@ public class CourseCreation {
 	public void update() throws Exception {
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM COURSE WHERE name = '" + course.getName() + "';");
-			statement.executeUpdate("INSERT INTO course (name, credits) VALUES('" + course.getName() + "','" + course.getCredits() + "');");
-			DBUtil.close(statement);
-			
+			statement.executeUpdate("INSERT INTO course (name, credits) VALUES('" + course.getName() + "','" + course.getCredits() + "');");		
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}

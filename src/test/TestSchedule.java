@@ -1,15 +1,18 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
 
-import database.CourseCreation;
-import database.OfferingCreation;
-import database.ScheduleCreation;
+import database.CourseDAO;
+import database.OfferingDAO;
+import database.ScheduleDAO;
 import entity.Course;
 import entity.Offering;
 import entity.Schedule;
@@ -110,44 +113,44 @@ public class TestSchedule {
 
 	@Test
 	public void testCourseCreate() throws Exception {
-		Course c = CourseCreation.create("CS202", 1);
-		Course c2 = CourseCreation.find("CS202");
+		Course c = CourseDAO.create("CS202", 1);
+		Course c2 = CourseDAO.find("CS202");
 		assertEquals("CS202", c2.getName());
-		Course c3 = CourseCreation.find("Nonexistent");
+		Course c3 = CourseDAO.find("Nonexistent");
 		assertNull(c3);
 	}
 
 	@Test
 	public void testOfferingCreate() throws Exception {
-		Course c = CourseCreation.create("CS202", 2);
-		Offering offering = OfferingCreation.create(c, "M10");
+		Course c = CourseDAO.create("CS202", 2);
+		Offering offering = OfferingDAO.create(c, "M10");
 		assertNotNull(offering);
 	}
 
 	@Test
 	public void testPersistentSchedule() throws Exception {
-		Schedule s = ScheduleCreation.create("Bob");
+		Schedule s = ScheduleDAO.create("Bob");
 		assertNotNull(s);
 	}
 
 	@Test
 	public void testScheduleUpdate() throws Exception {
-		Course cs101 = CourseCreation.create("CS101", 3);
+		Course cs101 = CourseDAO.create("CS101", 3);
 	//	cs101.update();
-		Offering off1 = OfferingCreation.create(cs101, "M10");
+		Offering off1 = OfferingDAO.create(cs101, "M10");
 		off1.update();
-		Offering off2 = OfferingCreation.create(cs101, "T9");
+		Offering off2 = OfferingDAO.create(cs101, "T9");
 		off2.update();
-		Schedule s = ScheduleCreation.create("Bob");
+		Schedule s = ScheduleDAO.create("Bob");
 		s.add(off1);
 		s.add(off2);
 		s.update();
-		Schedule s2 = ScheduleCreation.create("Alice");
+		Schedule s2 = ScheduleDAO.create("Alice");
 		s2.add(off1);
 		s2.update();
-		Schedule s3 = ScheduleCreation.find("Bob");
+		Schedule s3 = ScheduleDAO.find("Bob");
 		assertEquals(2, s3.getOfferings().size());
-		Schedule s4 = ScheduleCreation.find("Alice");
+		Schedule s4 = ScheduleDAO.find("Alice");
 		assertEquals(1, s4.getOfferings().size());
 		
 	}

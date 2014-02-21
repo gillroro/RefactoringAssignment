@@ -9,21 +9,22 @@ import java.util.Collection;
 import entity.Offering;
 import entity.Schedule;
 
-public class ScheduleCreation {
+public class ScheduleDAO{
 	
 	private static Connection conn;
 	private Schedule schedule;
+	private static Statement statement;
 	
 	public static void deleteAll() throws Exception {
 		
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule");
-			DBUtil.close(statement);
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
@@ -34,13 +35,13 @@ public class ScheduleCreation {
 		
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + name + "';");
-			DBUtil.close(statement);
 			return new Schedule(name);
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
@@ -51,15 +52,15 @@ public class ScheduleCreation {
 		
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM schedule WHERE name= '" + name + "';");
 			Schedule schedule = new Schedule(name);
 			while (result.next()) {
 				int offeringId = result.getInt("offeringId");
-				Offering offering = OfferingCreation.find(offeringId);
+				Offering offering = OfferingDAO.find(offeringId);
 				schedule.add(offering);
 			}
-			DBUtil.close(statement);
+			
 			DBUtil.close(result);
 			return schedule;
 		} 
@@ -69,6 +70,7 @@ public class ScheduleCreation {
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
@@ -80,15 +82,16 @@ public class ScheduleCreation {
 		
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			ResultSet results = statement.executeQuery("SELECT DISTINCT Name FROM schedule;");
 			while (results.next())
-				result.add(ScheduleCreation.find(results.getString("Name")));
-			DBUtil.close(statement);
+				result.add(ScheduleDAO.find(results.getString("Name")));
+			
 			DBUtil.close(results);
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}
@@ -100,16 +103,17 @@ public class ScheduleCreation {
 	
 		try {
 			conn = ConnectionCreation.getConnection();
-			Statement statement = conn.createStatement();
+			statement = conn.createStatement();
 			statement.executeUpdate("DELETE FROM schedule WHERE name = '" + schedule.getName() + "';");
 			for (int i = 0; i < schedule.getOfferings().size(); i++) {
 				Offering offering = (Offering) schedule.getOfferings().get(i);
 				statement.executeUpdate("INSERT INTO schedule(name, offeringId) VALUES('" + schedule.getName() + "','" + offering.getId() + "');");
 			}
-			DBUtil.close(statement);
+			
 		} 
 		finally {
 			try { 
+				DBUtil.close(statement);
 				DBUtil.close(conn);
 			} 
 			catch (Exception ignored) {}

@@ -1,11 +1,12 @@
 package test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import database.CourseCreation;
-import database.OfferingCreation;
-import database.ScheduleCreation;
+import database.CourseDAO;
+import database.OfferingDAO;
+import database.ScheduleDAO;
 import entity.Course;
 import entity.Offering;
 import entity.Report;
@@ -19,7 +20,7 @@ public class TestReport  {
 
 	@Test
 	public void testEmptyReport() throws Exception {
-		ScheduleCreation.deleteAll();
+		ScheduleDAO.deleteAll();
 		Report report = new Report();
 		StringBuffer buffer = new StringBuffer();
 		report.write(buffer);
@@ -28,18 +29,18 @@ public class TestReport  {
 	
 	@Test
 	public void testReport() throws Exception {
-		ScheduleCreation.deleteAll();
-		Course cs101 = CourseCreation.create("CS101", 3);
+		ScheduleDAO.deleteAll();
+		Course cs101 = CourseDAO.create("CS101", 3);
 		//cs101.update();
-		Offering off1 = OfferingCreation.create(cs101, "M10");
+		Offering off1 = OfferingDAO.create(cs101, "M10");
 		off1.update();
-		Offering off2 = OfferingCreation.create(cs101, "T9");
+		Offering off2 = OfferingDAO.create(cs101, "T9");
 		off2.update();
-		Schedule s = ScheduleCreation.create("Bob");
+		Schedule s = ScheduleDAO.create("Bob");
 		s.add(off1);
 		s.add(off2);
 		s.update();
-		Schedule s2 = ScheduleCreation.create("Alice");
+		Schedule s2 = ScheduleDAO.create("Alice");
 		s2.add(off1);
 		s2.update();
 		Report report = new Report();
